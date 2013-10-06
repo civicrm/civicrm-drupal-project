@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## Download Drupal, CiviCRM, dependencies, and useful development tools.
+## Setup basic symlinks.
+##
+## Maybe, when drush or composer is more mature, we can eliminate this.
+
+BINDIR=$(dirname $0)
+PRJDIR=$(dirname "$BINDIR")
+WEBDIR="$PRJDIR/web"
+
+## Validation
+drush=$(which drush)
+if [ -z "$drush" ]; then
+  echo "failed to locate drush"
+  exit 1
+fi
+
+drush | grep -qs makefile || {
+ echo "drush does not support drush-make"; exit 1
+}
+
+if [ -d "$WEBDIR" ]; then
+  echo "Web directory ($WEBDIR) already exists. Aborting."
+  exit 2
+fi
+
+## Begin execution
+set -e
+pushd $PRJDIR >> /dev/null
+  drush make --working-copy app/config/drush.make "$WEBDIR"
+popd >> /dev/null

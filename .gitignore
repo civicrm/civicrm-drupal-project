@@ -1,0 +1,8 @@
+app/cache/
+app/config/civix.ini
+app/run/
+app/tmp/
+vendor/
+bin/civix
+web/
+*~
