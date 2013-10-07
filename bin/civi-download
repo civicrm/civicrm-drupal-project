@@ -6,8 +6,17 @@
 ## Maybe, when drush or composer is more mature, we can eliminate this.
 
 BINDIR=$(dirname $0)
+case "$BINDIR" in
+  .*)
+    BINDIR="$PWD/$BINDIR"
+    ;;
+esac
+
 PRJDIR=$(dirname "$BINDIR")
 WEBDIR="$PRJDIR/web"
+TMPDIR="$PRJDIR/app/tmp"
+CIVIXVER=13.10.0
+CIVIXURL="http://downloads.sourceforge.net/project/civix/civix-${CIVIXVER}.tar.bz2?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fcivix%2Ffiles%2F&use_mirror=master"
 
 ## Validation
 drush=$(which drush)
@@ -25,8 +34,23 @@ if [ -d "$WEBDIR" ]; then
   exit 2
 fi
 
+if [ ! -d "$TMPDIR" ]; then
+  mkdir -p "$TMPDIR"
+fi
+
 ## Begin execution
 set -e
 pushd $PRJDIR >> /dev/null
   drush make --working-copy app/config/drush.make "$WEBDIR"
+
+  if which wget >> /dev/null ; then
+    wget -O "$TMPDIR/civix.tar.bz2" "$CIVIXURL"
+  elif which curl >> /dev/null ; then
+    curl -o "$TMPDIR/civix.tar.bz2" "$CIVIXURL"
+  else
+    echo "error: failed to locate curl or wget"
+  fi
+  mkdir -p vendor/civicrm/civix
+  tar xvj  --strip-components 1 -C vendor/civicrm/civix -f "$TMPDIR/civix.tar.bz2"
+  ln -s $PRJDIR/vendor/civicrm/civix/civix $PRJDIR/bin/civix
 popd >> /dev/null
