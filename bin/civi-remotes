@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+###########################################
+## Create or update the URL of a git remote
+## usage: git_set_remote <local-repo-path> <remote-name> <remote-url>
+function git_set_remote() {
+  REPODIR="$1"
+  REMOTE_NAME="$2"
+  REMOTE_URL="$3"
+
+  pushd "$REPODIR" >> /dev/null
+    git remote set-url "$REMOTE_NAME"  "$REMOTE_URL" >/dev/null 2>&1 || git remote add "$REMOTE_NAME"  "$REMOTE_URL"
+  popd >> /dev/null
+}
+
+#######
+## Main
+ORIGIN_BASE_URL="$1"
+UPSTREAM_BASE_URL="$2"
+if [ -z "$ORIGIN_BASE_URL" ]; then
+  echo "Change the remotes for the CiviCRM repositories"
+  echo "usage: $0 <origin-base-url> <upstream-base-url>"
+  echo "example: $0 https://github.com/totten https://github.com/civicrm"
+  exit 1
+fi
+
+git_set_remote web/sites/all/modules/civicrm            origin   "$ORIGIN_BASE_URL/civicrm-core.git"
+git_set_remote web/sites/all/modules/civicrm/drupal     origin   "$ORIGIN_BASE_URL/civicrm-drupal.git"
+git_set_remote web/sites/all/modules/civicrm/packages   origin   "$ORIGIN_BASE_URL/civicrm-packages.git"
+
+if [ -n "$UPSTREAM_BASE_URL" ]; then
+  git_set_remote web/sites/all/modules/civicrm          upstream "$ORIGIN_BASE_URL/civicrm-core.git"
+  git_set_remote web/sites/all/modules/civicrm/drupal   upstream "$ORIGIN_BASE_URL/civicrm-drupal.git"
+  git_set_remote web/sites/all/modules/civicrm/packages upstream "$ORIGIN_BASE_URL/civicrm-packages.git"
+fi
