@@ -13,7 +13,9 @@ cd civicrm-drupal-project/bin/
 
 At this point, it is a good idea to add the "bin" directory to your path, e.g.
 
+```bash
 export PATH=/path/to/civicrm-drupal-project/bin:$PATH
+```
 
 (Note: Adjust as needed for your filesystem.) To automatically set this up
 again each time you login, add the statement to ~/.bashrc or ~/.profile .
