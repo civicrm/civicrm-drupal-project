@@ -21,12 +21,12 @@ CIVIXURL="http://downloads.sourceforge.net/project/civix/civix-${CIVIXVER}.tar.b
 ## Validation
 drush=$(which drush)
 if [ -z "$drush" ]; then
-  echo "failed to locate drush"
+  echo "Failed to locate drush. Please install Drush (https://github.com/drush-ops/drush) and register it in the PATH."
   exit 1
 fi
 
 drush | grep -qs makefile || {
- echo "drush does not support drush-make"; exit 1
+ echo "Failed to locate drush-make. Plese install drush-make (https://drupal.org/project/drush_make)"; exit 1
 }
 
 if [ -d "$WEBDIR" ]; then
