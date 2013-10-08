@@ -1,9 +1,9 @@
-== civicrm-drupal-project ==
+# civicrm-drupal-project
 
 This project is a template which you can use to prepare a useful CiviCRM
 development environment.
 
-== Installation ==
+## Installation
 
 ```bash
 git clone https://github.com/civicrm/civicrm-drupal-project.git -b 4.4
@@ -18,7 +18,7 @@ export PATH=/path/to/civicrm-drupal-project/bin:$PATH
 (Note: Adjust as needed for your filesystem.) To automatically set this up
 again each time you login, add the statement to ~/.bashrc or ~/.profile .
 
-== Forking ==
+## Forking
 
 If you plan to do development with CiviCRM and Drupal 7.x, then you should
 register for an account on github.com and fork the following projects:
