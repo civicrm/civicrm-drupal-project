@@ -7,15 +7,29 @@ development environment.
 
 ```bash
 git clone https://github.com/civicrm/civicrm-drupal-project.git -b 4.4
-./bin/civi-download
+cd civicrm-drupal-project/bin/
+./civi-download
 ```
+
+At this point, it is a good idea to add the "bin" directory to your path, e.g.
+
+export PATH=/path/to/civicrm-drupal-project/bin:$PATH
+
+(Note: Adjust as needed for your filesystem.) To automatically set this up
+again each time you login, add the statement to ~/.bashrc or ~/.profile .
 
 == Forking ==
 
-In Github, you can create your own fork of the civicrm-drupal-project. Then
-update your workstation to link with that fork:
+If you plan to do development with CiviCRM and Drupal 7.x, then you should
+register for an account on github.com and fork the following projects:
+
+ * https://github.com/civicrm/civicrm-drupal-project
+ * https://github.com/civicrm/civicrm-core
+ * https://github.com/civicrm/civicrm-drupal
+ * https://github.com/civicrm/civicrm-packages
+
+Then update your workstation to link with the new forks:
 
 ```bash
-git remote set-url origin https://github.com/MYUSER/civicrm-drupal-project.git
-git push origin --all
+./civi-remotes https://github.com/MYUSER https://github.com/civicrm
 ```
