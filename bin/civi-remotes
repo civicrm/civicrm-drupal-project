@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+BINDIR=$(dirname $0)
+case "$BINDIR" in
+  .*)
+    BINDIR="$PWD/$BINDIR"
+    ;;
+esac
+PRJDIR="$BINDIR/.."
+
 ###########################################
 ## Create or update the URL of a git remote
 ## usage: git_set_remote <local-repo-path> <remote-name> <remote-url>
@@ -25,12 +33,14 @@ if [ -z "$ORIGIN_BASE_URL" ]; then
   exit 1
 fi
 
-git_set_remote web/sites/all/modules/civicrm            origin   "$ORIGIN_BASE_URL/civicrm-core.git"
-git_set_remote web/sites/all/modules/civicrm/drupal     origin   "$ORIGIN_BASE_URL/civicrm-drupal.git"
-git_set_remote web/sites/all/modules/civicrm/packages   origin   "$ORIGIN_BASE_URL/civicrm-packages.git"
+$PRJDIR/web/sites/all/modules/civicrm/bin/gitify \
+  Drupal \
+  "$PRJDIR/web/sites/all/modules/civicrm" \
+  --fork "$ORIGIN_BASE_URL" \
+  --upstream "$UPSTREAM_BASE_URL" \
+  --hooks
 
+git_set_remote "$PRJDIR"                                          origin   "$ORIGIN_BASE_URL/civicrm-drupal-project.git"
 if [ -n "$UPSTREAM_BASE_URL" ]; then
-  git_set_remote web/sites/all/modules/civicrm          upstream "$ORIGIN_BASE_URL/civicrm-core.git"
-  git_set_remote web/sites/all/modules/civicrm/drupal   upstream "$ORIGIN_BASE_URL/civicrm-drupal.git"
-  git_set_remote web/sites/all/modules/civicrm/packages upstream "$ORIGIN_BASE_URL/civicrm-packages.git"
+  git_set_remote "$PRJDIR"                                        upstream "$ORIGIN_BASE_URL/civicrm-drupal-project.git"
 fi
