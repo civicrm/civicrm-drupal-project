@@ -6,13 +6,13 @@
 api = 2
 
 ; Drupal core
-core = 7.x
+core = 8.x
 
 ; ****************************************
 ; Drupal core
 ; ****************************************
 
-projects[] = drupal
+projects[drupal][version] = 8.x
 
 ; ****************************************
 ; CiviCRM core
@@ -25,8 +25,8 @@ projects[] = drupal
 libraries[civicrmdrupal][destination] = modules
 libraries[civicrmdrupal][directory_name] = civicrm/drupal
 libraries[civicrmdrupal][download][type] = git
-libraries[civicrmdrupal][download][url] = git://github.com/civicrm/civicrm-drupal.git
-libraries[civicrmdrupal][download][branch] = 7.x-master
+libraries[civicrmdrupal][download][url] = git://github.com/totten/civicrm-drupal.git
+libraries[civicrmdrupal][download][branch] = 8.x-master
 libraries[civicrmdrupal][overwrite] = TRUE
 
 libraries[civicrmpackages][destination] = modules
@@ -61,24 +61,24 @@ libraries[civicrm][overwrite] = TRUE
 ; Runtime Modules
 ; ****************************************
 
-projects[civicrm_error][subdir] = contrib
-projects[civicrm_error][version] = 2.0-rc3
+;projects[civicrm_error][subdir] = contrib
+;projects[civicrm_error][version] = 2.0-rc3
 
-projects[webform][subdir] = contrib
-projects[webform][version] = 3.19
+;projects[webform][subdir] = contrib
+;projects[webform][version] = 3.19
 
-projects[webform_civicrm][subdir] = contrib
-projects[webform_civicrm][version] = 3.6
+;projects[webform_civicrm][subdir] = contrib
+;projects[webform_civicrm][version] = 3.6
 
-projects[views][subdir] = contrib
-projects[views][version] = 3.7
+;projects[views][subdir] = contrib
+;projects[views][version] = 3.7
 
 ; ****************************************
 ; Developer modules
 ; ****************************************
 
 projects[devel][subdir] = contrib
-projects[devel][version] = 1.3
+;projects[devel][version] = 1.3
 
 libraries[civicrmdeveloper][destination] = modules
 libraries[civicrmdeveloper][directory_name] = contrib/civicrm_developer
