@@ -4,5 +4,6 @@ app/run/
 app/tmp/
 vendor/
 bin/civix
+bin/composer
 web/
 *~
