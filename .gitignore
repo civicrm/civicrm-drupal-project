@@ -5,5 +5,9 @@ app/tmp/
 vendor/
 bin/civix
 bin/composer
+bin/drush
+bin/drush.bat
+bin/drush.complete.sh
+bin/drush.php
 web/
 *~

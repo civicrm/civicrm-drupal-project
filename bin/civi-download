@@ -41,16 +41,6 @@ if [ -z "$php" ]; then
   exit 3
 fi
 
-drush=$(which drush)
-if [ -z "$drush" ]; then
-  echo "Failed to locate drush. Please install Drush (https://github.com/drush-ops/drush) and register it in the PATH."
-  exit 1
-fi
-
-drush | grep -qs makefile || {
- echo "Failed to locate drush-make. Plese install drush-make (https://drupal.org/project/drush_make)"; exit 1
-}
-
 if [ ! -d "$TMPDIR" ]; then
   mkdir -p "$TMPDIR"
 fi
@@ -59,13 +49,6 @@ fi
 ## Begin execution
 set -e
 pushd $PRJDIR >> /dev/null
-  ## Download Drupal and dependencies
-  if [ -d "$WEBDIR" ]; then
-    echo "Web directory ($WEBDIR) already exists. Skipping."
-  else
-    drush make --working-copy app/config/drush.make "$WEBDIR"
-  fi
-
   ## Download composer
   if [ -f "$PRJDIR/bin/composer" ]; then
     echo "Composer binary ($PRJDIR/bin/composer) already exists. Skipping."
@@ -76,8 +59,25 @@ pushd $PRJDIR >> /dev/null
   fi
 
   ## Download civix
-  download_url "$CIVIXURL" "$TMPDIR/civix.tar.bz2"
-  mkdir -p vendor/civicrm/civix
-  tar xvj  --strip-components 1 -C vendor/civicrm/civix -f "$TMPDIR/civix.tar.bz2"
-  ln -s $PRJDIR/vendor/civicrm/civix/civix $PRJDIR/bin/civix
+  ## FIXME: Update civix so that it can be installed via composer as a dependnecy
+  if [ -e "$PRJDIR/bin/civix" -a -d "vendor/civicrm/civix" ]; then
+    echo "civix binary ($PRJDIR/bin/civix) already exists. Skipping."
+  else
+    download_url "$CIVIXURL" "$TMPDIR/civix.tar.bz2"
+    mkdir -p vendor/civicrm/civix
+    tar xvj  --strip-components 1 -C vendor/civicrm/civix -f "$TMPDIR/civix.tar.bz2"
+    [ -e "$PRJDIR/bin/civix" ] && rm -f "$PRJDIR/bin/civix"
+    ln -s "$PRJDIR/vendor/civicrm/civix/civix" "$PRJDIR/bin/civix"
+  fi
+
+  ## Download dependencies (via composer)
+  "$PRJDIR/bin/composer" install
+
+  ## Download Drupal, etal (via drush)
+  if [ -d "$WEBDIR" ]; then
+    echo "Web directory ($WEBDIR) already exists. Skipping."
+  else
+    "$PRJDIR/bin/drush" make --working-copy app/config/drush.make "$WEBDIR"
+  fi
+
 popd >> /dev/null
