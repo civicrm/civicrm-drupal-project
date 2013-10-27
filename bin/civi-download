@@ -51,8 +51,9 @@ set -e
 pushd $PRJDIR >> /dev/null
   ## Download composer
   if [ -f "$PRJDIR/bin/composer" ]; then
-    echo "Composer binary ($PRJDIR/bin/composer) already exists. Skipping."
+    echo "[[Composer binary ($PRJDIR/bin/composer) already exists. Skipping.]]"
   else
+    echo "[[Download composer]]"
     download_url "https://getcomposer.org/installer" "$TMPDIR/composer-installer"
     php "$TMPDIR/composer-installer" -- --install-dir="$PRJDIR/bin"
     mv "$PRJDIR/bin/composer.phar" "$PRJDIR/bin/composer"
@@ -61,8 +62,9 @@ pushd $PRJDIR >> /dev/null
   ## Download civix
   ## FIXME: Update civix so that it can be installed via composer as a dependnecy
   if [ -e "$PRJDIR/bin/civix" -a -d "vendor/civicrm/civix" ]; then
-    echo "civix binary ($PRJDIR/bin/civix) already exists. Skipping."
+    echo "[[civix binary ($PRJDIR/bin/civix) already exists. Skipping.]]"
   else
+    echo "[[Download civix]]"
     download_url "$CIVIXURL" "$TMPDIR/civix.tar.bz2"
     mkdir -p vendor/civicrm/civix
     tar xvj  --strip-components 1 -C vendor/civicrm/civix -f "$TMPDIR/civix.tar.bz2"
@@ -75,8 +77,9 @@ pushd $PRJDIR >> /dev/null
 
   ## Download Drupal, etal (via drush)
   if [ -d "$WEBDIR" ]; then
-    echo "Web directory ($WEBDIR) already exists. Skipping."
+    echo "[[Web directory ($WEBDIR) already exists. Skipping.]]"
   else
+    echo "[[Execute drush make]]"
     "$PRJDIR/bin/drush" make --working-copy app/config/drush.make "$WEBDIR"
   fi
 
