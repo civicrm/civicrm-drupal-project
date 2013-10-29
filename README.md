@@ -6,7 +6,7 @@ development environment.
 ## Installation
 
 ```bash
-git clone https://github.com/civicrm/civicrm-drupal-project.git -b 4.4
+git clone https://github.com/civicrm/civicrm-drupal-project.git -b 7.x-master
 cd civicrm-drupal-project/bin/
 ./civi-download
 ```
