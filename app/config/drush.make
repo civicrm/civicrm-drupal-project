@@ -73,6 +73,12 @@ projects[webform_civicrm][version] = 3.6
 projects[views][subdir] = contrib
 projects[views][version] = 3.7
 
+projects[login_destination][subdir] = contrib
+projects[login_destination][version] = "1.1"
+
+projects[userprotect][subdir] = contrib
+projects[userprotect][version] = "1.0"
+
 ; ****************************************
 ; Developer modules
 ; ****************************************
