@@ -64,6 +64,13 @@ libraries[civicrm][overwrite] = TRUE
 projects[civicrm_error][subdir] = contrib
 projects[civicrm_error][version] = 2.0-rc3
 
+
+projects[libraries][subdir] = contrib
+projects[libraries][version] = 1.0
+
+projects[redirect][subdir] = contrib
+projects[redirect][version] = 1.0-rc1
+
 projects[webform][subdir] = contrib
 projects[webform][version] = 3.19
 
@@ -72,6 +79,7 @@ projects[webform_civicrm][version] = 3.6
 
 projects[views][subdir] = contrib
 projects[views][version] = 3.7
+
 
 projects[login_destination][subdir] = contrib
 projects[login_destination][version] = "1.1"
