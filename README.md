@@ -9,6 +9,7 @@ development environment.
 git clone https://github.com/civicrm/civicrm-drupal-project.git -b 7.x-master
 cd civicrm-drupal-project/bin/
 ./civi-download
+./civi-install drupal-demo http://localhost civid7
 ```
 
 At this point, it is a good idea to add the "bin" directory to your path, e.g.
