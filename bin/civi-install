@@ -3,7 +3,6 @@ set -e
 
 ## Setup a Drupal site with CiviCRM configured for demonstration.
 ## If a site already exists, destroy and recreate it.
-## Usage: mk-drupal-demo-site <domain.name> <db_name>
 
 ## Pre-requisites:
 ## - MySQL admin credentials in ~/.my.cnf
@@ -34,7 +33,7 @@ export PATH="$BINDIR:$PATH"
 ###############################################################################
 function usage() {
   cat <<EOT
-Usage: mk-drupal-demo-site SITE_TYPE SITE_URL DB_NAME
+Usage: civi-install SITE_TYPE SITE_URL DB_NAME
 Re/creates a Drupal-based CiviCRM site.
 
   * SITE_TYPE: eg "drupal-demo", "wp-hrdemo"

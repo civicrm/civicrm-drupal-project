@@ -8,7 +8,7 @@
 ## Drop/create MySQL DB & user
 mysql_dropcreate
 
-## (Re)Create WP config files, tables, and data dirs
+## (Re)Create Drupal config files, tables, and data dirs
 drupal_install
 
 ## (Re)create CiviCRM config files, tables, and data dirs

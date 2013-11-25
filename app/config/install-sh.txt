@@ -20,7 +20,6 @@ CIVI_TEMPLATEC      Local path to the CiviCRM templates-cache (usually under CIV
 CIVI_UF             Type of CMS (Drupal, Drupal6, WordPress, Joomla)
 FACL_USERS          (For Linux ACL) List of POSIX username which should have read/write access to data files
 
-WPCLI               (For WordPress) Path to wp-cli
 MYSQLCLI            MySQL command
 
 SITE_KEY            CiviCRM site key (used for API calls)
