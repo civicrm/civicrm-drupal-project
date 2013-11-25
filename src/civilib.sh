@@ -41,7 +41,7 @@ function cvutil_summary() {
   cvutil_assertvars "$@"
   for var in "$@" ; do
     eval "val=\$$var"
-    echo " - $var: \"$val\""
+    echo " - $var: $val"
   done
 }
 

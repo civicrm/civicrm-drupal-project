@@ -1,6 +1,18 @@
 #!/bin/bash
 
-## Callback used by bin/mk-drupal-site demo
+## Setup a CiviCRM-Drupal demo site. (For use with "civi-install")
+##
+## usage: civi-install drupal-demo <url> <db-name>
+## usage: civi-install drupal-demo http://localhost:8181 cividrupal
+
+## Drop/create MySQL DB & user
+mysql_dropcreate
+
+## (Re)Create WP config files, tables, and data dirs
+drupal_install
+
+## (Re)create CiviCRM config files, tables, and data dirs
+civicrm_install
 
 pushd "${WEB_ROOT}/sites/${SITE_DIR}" >> /dev/null
   $DRUSHCLI -y updatedb

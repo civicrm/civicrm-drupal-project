@@ -35,7 +35,7 @@ function usage() {
 Usage: mk-drupal-demo-site SITE_TYPE SITE_URL DB_NAME
 Re/creates a Drupal-based CiviCRM site.
 
-  * SITE_TYPE: eg "demo", "webtest"
+  * SITE_TYPE: eg "drupal-demo", "wp-hrdemo"
   * SITE_URL: URL of the site. Example: http://example.org:8080
   * DB_NAME: MySQL database name. Example: civicrm_test
 
@@ -51,8 +51,8 @@ EOT
 [ "$1" = "--help" ] && usage
 
 SITE_TYPE="$1"
-SITE_TYPE_DIR="$PRJDIR/app/config/${SITE_TYPE}"
-[ ! -d "$SITE_TYPE_DIR" ] && echo "ERROR: Missing directory for ($SITE_TYPE_DIR)" && usage
+SITE_INSTALLER="$PRJDIR/app/config/install-${SITE_TYPE}.sh"
+[ ! -f "$SITE_INSTALLER" ] && echo "ERROR: Missing installation file ($SITE_INSTALLER)" && usage
 
 SITE_TITLE="CiviCRM-Drupal Demo"
 SITE_URL="$2"
@@ -88,26 +88,6 @@ DEMO_EMAIL="demo@example.com"
 ###############################################################################
 ## Main
 set -ex
-
-## Apply demo site customizations
-if [ -f "${SITE_TYPE_DIR}/pre-install.sh" ]; then
-  source "${SITE_TYPE_DIR}/pre-install.sh"
-fi
-
-## Drop/create MySQL DB & user
-mysql_dropcreate
-
-## (Re)Create WP config files, tables, and data dirs
-drupal_install
-
-## (Re)create CiviCRM config files, tables, and data dirs
-civicrm_install
-
-## Apply demo site customizations
-if [ -f "${SITE_TYPE_DIR}/post-install.sh" ]; then
-  source "${SITE_TYPE_DIR}/post-install.sh"
-fi
-
-## Display summary
-set +x
-cvutil_summary "New Site Summary"  SITE_URL DB_NAME WEB_ROOT CIVI_ROOT SITE_TYPE_DIR ADMIN_USER ADMIN_PASS DEMO_USER DEMO_PASS
+source "$SITE_INSTALLER"
+set +ex
+cvutil_summary "New Site Summary"  SITE_INSTALLER SITE_URL DB_NAME WEB_ROOT CIVI_ROOT ADMIN_USER ADMIN_PASS DEMO_USER DEMO_PASS
