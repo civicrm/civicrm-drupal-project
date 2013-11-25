@@ -32,10 +32,11 @@ source "$PRJDIR/src/civilib.sh"
 ###############################################################################
 function usage() {
   cat <<EOT
-Usage: mk-drupal-demo-site SITE_URL DB_NAME
+Usage: mk-drupal-demo-site SITE_TYPE SITE_URL DB_NAME
 Re/creates a Drupal-based CiviCRM site.
 
-  * SITE_URL: URL of the site. Example: htp://example.org:8080
+  * SITE_TYPE: eg "demo", "webtest"
+  * SITE_URL: URL of the site. Example: http://example.org:8080
   * DB_NAME: MySQL database name. Example: civicrm_test
 
 EOT
@@ -46,15 +47,19 @@ EOT
 ###############################################################################
 ## Parse arguments and set default environment variables
 
-[ -z "$1" ] && usage
+[ -z "$1" -o -z "$2" ] && usage
 [ "$1" = "--help" ] && usage
 
+SITE_TYPE="$1"
+SITE_TYPE_DIR="$PRJDIR/app/config/${SITE_TYPE}"
+[ ! -d "$SITE_TYPE_DIR" ] && echo "ERROR: Missing directory for ($SITE_TYPE_DIR)" && usage
+
 SITE_TITLE="CiviCRM-Drupal Demo"
-SITE_URL="$1"
+SITE_URL="$2"
 [ -z "$SITE_URL" ] && usage
 SITE_DIR=$(php -r '$p = parse_url($argv[1]); echo $p["host"];' "$SITE_URL")
 
-DB_NAME="$2"
+DB_NAME="$3"
 [ -z "$DB_NAME" ] && usage
 DB_USER="$DB_NAME"
 DB_PASS=$(cvutil_makepasswd 12)
@@ -84,6 +89,11 @@ DEMO_EMAIL="demo@example.com"
 ## Main
 set -ex
 
+## Apply demo site customizations
+if [ -f "${SITE_TYPE_DIR}/pre-install.sh" ]; then
+  source "${SITE_TYPE_DIR}/pre-install.sh"
+fi
+
 ## Drop/create MySQL DB & user
 mysql_dropcreate
 
@@ -94,18 +104,10 @@ drupal_install
 civicrm_install
 
 ## Apply demo site customizations
-pushd "${WEB_ROOT}/sites/${SITE_DIR}" >> /dev/null
-  $DRUSHCLI -y updatedb
-  $DRUSHCLI -y dis overlay shortcut color
-  $DRUSHCLI -y en civicrm toolbar civicrmtheme
-  $DRUSHCLI -y vset theme_default seven
-  $DRUSHCLI -y vset civicrmtheme_theme_admin seven
-
-  $DRUSHCLI -y en civicrm_webtest
-  $DRUSHCLI -y user-create --password="$DEMO_PASS" --mail="$DEMO_EMAIL" "$DEMO_USER"
-  $DRUSHCLI -y user-add-role civicrm_webtest_user "$DEMO_USER"
-popd >> /dev/null
+if [ -f "${SITE_TYPE_DIR}/post-install.sh" ]; then
+  source "${SITE_TYPE_DIR}/post-install.sh"
+fi
 
 ## Display summary
 set +x
-cvutil_summary "New Site Summary"  SITE_URL DB_NAME WEB_ROOT CIVI_ROOT ADMIN_USER ADMIN_PASS DEMO_USER DEMO_PASS
+cvutil_summary "New Site Summary"  SITE_URL DB_NAME WEB_ROOT CIVI_ROOT SITE_TYPE_DIR ADMIN_USER ADMIN_PASS DEMO_USER DEMO_PASS
