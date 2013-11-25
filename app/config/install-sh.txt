@@ -20,7 +20,6 @@ CIVI_TEMPLATEC      Local path to the CiviCRM templates-cache (usually under CIV
 CIVI_UF             Type of CMS (Drupal, Drupal6, WordPress, Joomla)
 FACL_USERS          (For Linux ACL) List of POSIX username which should have read/write access to data files
 
-DRUSHCLI            (For Drupal) Path to drush
 WPCLI               (For WordPress) Path to wp-cli
 MYSQLCLI            MySQL command
 
@@ -38,3 +37,10 @@ mysql_dropcreate    Drop/create the MySQL database and user
 drupal_install      Create Drupal config files, tables, and data dirs (using drush)
 wp_install          Create WordPress config files, tables, and data dirs (using wp-cli)
 civicrm_install	    Create CiviCRM config files, tables, and data dirs
+
+===== AVAILABLE COMMANDS =====
+
+ * Standard POSIX commands (cp, mv, etc) based on GNU or BSD suites
+ * composer
+ * civix
+ * drush (for Drupal builds)
