@@ -1,0 +1,111 @@
+#!/bin/bash
+set -e
+
+## Setup a Drupal site with CiviCRM configured for demonstration.
+## If a site already exists, destroy and recreate it.
+## Usage: mk-drupal-demo-site <domain.name> <db_name>
+
+## Pre-requisites:
+## - MySQL admin credentials in ~/.my.cnf
+## - httpd with proper vhost, etc (eg Apache vhost with mod_rewrite)
+## - DNS or /etc/hosts entries for "url"
+## - drush
+## - (recommended) filesystem with "acl" support
+
+###############################################################################
+## Bootstrap
+
+## Determine the absolute path of the directory with the file
+## usage: absdirname <file-path>
+function absdirname() {
+  pushd $(dirname $0) >> /dev/null
+    pwd
+  popd >> /dev/null
+}
+
+BINDIR=$(absdirname "$0")
+PRJDIR=$(dirname "$BINDIR")
+WEBDIR="$PRJDIR/web"
+TMPDIR="$PRJDIR/app/tmp"
+source "$PRJDIR/src/civilib.sh"
+
+###############################################################################
+function usage() {
+  cat <<EOT
+Usage: mk-drupal-demo-site SITE_URL DB_NAME
+Re/creates a Drupal-based CiviCRM site.
+
+  * SITE_URL: URL of the site. Example: htp://example.org:8080
+  * DB_NAME: MySQL database name. Example: civicrm_test
+
+EOT
+
+  exit 99;
+}
+
+###############################################################################
+## Parse arguments and set default environment variables
+
+[ -z "$1" ] && usage
+[ "$1" = "--help" ] && usage
+
+SITE_TITLE="CiviCRM-Drupal Demo"
+SITE_URL="$1"
+[ -z "$SITE_URL" ] && usage
+SITE_DIR=$(php -r '$p = parse_url($argv[1]); echo $p["host"];' "$SITE_URL")
+
+DB_NAME="$2"
+[ -z "$DB_NAME" ] && usage
+DB_USER="$DB_NAME"
+DB_PASS=$(cvutil_makepasswd 12)
+DB_HOST=localhost
+
+WEB_ROOT="$WEBDIR"
+[ ! -d "$WEB_ROOT" ] && echo "ERROR: $WEB_ROOT: Web root directory not found." && usage
+CIVI_ROOT="${WEB_ROOT}/sites/all/modules/civicrm"
+CIVI_SETTINGS="${WEB_ROOT}/sites/${SITE_DIR}/civicrm.settings.php"
+CIVI_FILES="${WEB_ROOT}/sites/${SITE_DIR}/files/civicrm"
+CIVI_TEMPLATEC="${CIVI_FILES}/templates_c"
+CIVI_UF="Drupal"
+FACL_USERS="www-data $(whoami)"
+
+DRUSHCLI="$PRJDIR/bin/drush"
+MYSQLCLI="mysql"
+
+SITE_KEY=$(cvutil_makepasswd 16)
+ADMIN_USER="admin"
+ADMIN_PASS=$(cvutil_makepasswd 12)
+ADMIN_EMAIL="admin@example.com"
+DEMO_USER="demo"
+DEMO_PASS="demo"
+DEMO_EMAIL="demo@example.com"
+
+###############################################################################
+## Main
+set -ex
+
+## Drop/create MySQL DB & user
+mysql_dropcreate
+
+## (Re)Create WP config files, tables, and data dirs
+drupal_install
+
+## (Re)create CiviCRM config files, tables, and data dirs
+civicrm_install
+
+## Apply demo site customizations
+pushd "${WEB_ROOT}/sites/${SITE_DIR}" >> /dev/null
+  $DRUSHCLI -y updatedb
+  $DRUSHCLI -y dis overlay shortcut color
+  $DRUSHCLI -y en civicrm toolbar civicrmtheme
+  $DRUSHCLI -y vset theme_default seven
+  $DRUSHCLI -y vset civicrmtheme_theme_admin seven
+
+  $DRUSHCLI -y en civicrm_webtest
+  $DRUSHCLI -y user-create --password="$DEMO_PASS" --mail="$DEMO_EMAIL" "$DEMO_USER"
+  $DRUSHCLI -y user-add-role civicrm_webtest_user "$DEMO_USER"
+popd >> /dev/null
+
+## Display summary
+set +x
+cvutil_summary "New Site Summary"  SITE_URL DB_NAME WEB_ROOT CIVI_ROOT ADMIN_USER ADMIN_PASS DEMO_USER DEMO_PASS
