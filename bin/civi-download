@@ -5,13 +5,15 @@
 ##
 ## Maybe, when drush or composer is more mature, we can eliminate this.
 
-BINDIR=$(dirname $0)
-case "$BINDIR" in
-  .*)
-    BINDIR="$PWD/$BINDIR"
-    ;;
-esac
+## Determine the absolute path of the directory with the file
+## absdirname <file-path>
+function absdirname() {
+  pushd $(dirname $0) >> /dev/null
+    pwd
+  popd >> /dev/null
+}
 
+BINDIR=$(absdirname "$0")
 PRJDIR=$(dirname "$BINDIR")
 WEBDIR="$PRJDIR/web"
 TMPDIR="$PRJDIR/app/tmp"

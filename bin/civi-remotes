@@ -1,13 +1,14 @@
 #!/bin/bash
 set -e
 
-BINDIR=$(dirname $0)
-case "$BINDIR" in
-  .*)
-    BINDIR="$PWD/$BINDIR"
-    ;;
-esac
-PRJDIR="$BINDIR/.."
+function absdirname() {
+  pushd $(dirname $0) >> /dev/null
+    pwd
+  popd >> /dev/null
+}
+
+BINDIR=$(absdirname "$0")
+PRJDIR=$(dirname "$BINDIR")
 
 ###########################################
 ## Create or update the URL of a git remote
