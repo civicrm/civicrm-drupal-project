@@ -1,0 +1,40 @@
+Files named "install-*.sh" include instructions for configuring a new web site.
+
+===== ENVIRONMENT VARIABLES =====
+
+SITE_TYPE           A brief code name like "drupal-demo" or "wp-hrdemo"
+SITE_TITLE          A brief label to display on the new site
+SITE_URL            Fully formed URL of the site (eg "https://example.com" or "http://localhost:8181/subdir")
+SITE_DIR            (For Drupal multi-site) The name of site's configuration directory
+
+DB_NAME             MySQL database name
+DB_USER             MySQL username
+DB_PASS             MySQL password
+DB_HOST             MySQL hostname
+
+WEB_ROOT            Local path to the (Drupal/WordPress/Joomla) web root
+CIVI_ROOT           Local path to the core CiviCRM source tree
+CIVI_SETTINGS       Local path to the CiviCRM settings file
+CIVI_FILES          Local path to the CiviCRM data files
+CIVI_TEMPLATEC      Local path to the CiviCRM templates-cache (usually under CIVI_FILES)
+CIVI_UF             Type of CMS (Drupal, Drupal6, WordPress, Joomla)
+FACL_USERS          (For Linux ACL) List of POSIX username which should have read/write access to data files
+
+DRUSHCLI            (For Drupal) Path to drush
+WPCLI               (For WordPress) Path to wp-cli
+MYSQLCLI            MySQL command
+
+SITE_KEY            CiviCRM site key (used for API calls)
+ADMIN_USER          Administrative username
+ADMIN_PASS          Administrative user's password
+ADMIN_EMAIL         Administrative user's email address
+DEMO_USER           Demo username
+DEMO_PASS           Demo user's password
+DEMO_EMAIL          Demo user's email address
+
+===== HELPER FUNCTIONS =====
+
+mysql_dropcreate    Drop/create the MySQL database and user
+drupal_install      Create Drupal config files, tables, and data dirs (using drush)
+wp_install          Create WordPress config files, tables, and data dirs (using wp-cli)
+civicrm_install	    Create CiviCRM config files, tables, and data dirs
