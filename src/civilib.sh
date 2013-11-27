@@ -49,12 +49,7 @@ function cvutil_summary() {
 ###############################################################################
 ## usage: cvutil_makepasswd <strlen>
 function cvutil_makepasswd() {
-  ## TODO test in linux
-  #if [ -n $(which makepasswd) ]; then
-  #  makepasswd --chars=$1
-  #else
-    tr -dc "[a-zA-Z0-9]" < /dev/urandom | head -c $1
-  #fi
+  php $PRJDIR/bin/mkpasswd.php $1
 }
 
 ###############################################################################
