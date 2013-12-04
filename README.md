@@ -13,7 +13,7 @@ cd civicrm-drupal-project/bin
 ```
 
 The final command will print out URLs and credentials for accessing the
-instance of CiviCRM/WordPress.
+instance of CiviCRM/Drupal.
 
 ## Installation: Apache/nginx
 
@@ -25,10 +25,10 @@ cd civicrm-drupal-project/bin/
 ./civi-download
 ./civi-install drupal-demo http://localhost civid7
 ```
-(Note: The last command should be adjusted to your local system. It takes the form: "civi-install wp-demo [demo-site-url] [demo-db-name]"
+(Note: The last command should be adjusted to your local system. It takes the form: "civi-install drupal-demo [demo-site-url] [demo-db-name]"
 
 Now update the Apache/nginx configuration and create a matching virtual host (e.g.
-named "civiwp.localhost" with a DocumentRoot "/absolute/path/to/civicrm-wordpress-project/web").
+named "cividrupal.localhost" with a DocumentRoot "/absolute/path/to/civicrm-drupal-project/web").
 Restart Apache/nginx.
 
 ## Installation: CLI Tools
@@ -37,7 +37,7 @@ The project bundles in several useful command-line tools (such as composer,
 drush/wp-cli, and civix). It will be handy to add these to your PATH:
 
 ```bash
-export PATH=/path/to/civicrm-wordpress-project/bin:$PATH
+export PATH=/path/to/civicrm-drupal-project/bin:$PATH
 ```
 
 (Note: Adjust as needed for your filesystem.) To automatically set this up
