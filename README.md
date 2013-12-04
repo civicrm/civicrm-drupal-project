@@ -3,7 +3,21 @@
 This project is a template which you can use to prepare a useful CiviCRM
 development environment.
 
-## Installation
+## Installation: Quickstart (PHP 5.4+ built-in webserver)
+
+```bash
+git clone https://github.com/civicrm/civicrm-drupal-project.git -b 7.x-master
+cd civicrm-drupal-project/bin
+./civi-download
+./civi-drupal-startup
+```
+
+The final command will print out URLs and credentials for accessing the
+instance of CiviCRM/WordPress.
+
+## Installation: Apache/nginx
+
+Alternatively, if you have a proper web server, you can use it:
 
 ```bash
 git clone https://github.com/civicrm/civicrm-drupal-project.git -b 7.x-master
@@ -11,15 +25,26 @@ cd civicrm-drupal-project/bin/
 ./civi-download
 ./civi-install drupal-demo http://localhost civid7
 ```
+(Note: The last command should be adjusted to your local system. It takes the form: "civi-install wp-demo [demo-site-url] [demo-db-name]"
 
-At this point, it is a good idea to add the "bin" directory to your path, e.g.
+Now update the Apache/nginx configuration and create a matching virtual host (e.g.
+named "civiwp.localhost" with a DocumentRoot "/absolute/path/to/civicrm-wordpress-project/web").
+Restart Apache/nginx.
+
+## Installation: CLI Tools
+
+The project bundles in several useful command-line tools (such as composer,
+drush/wp-cli, and civix). It will be handy to add these to your PATH:
 
 ```bash
-export PATH=/path/to/civicrm-drupal-project/bin:$PATH
+export PATH=/path/to/civicrm-wordpress-project/bin:$PATH
 ```
 
 (Note: Adjust as needed for your filesystem.) To automatically set this up
 again each time you login, add the statement to ~/.bashrc or ~/.profile .
+
+If you have already installed these tools or don't want them, then
+simply skip this step.
 
 ## Forking
 

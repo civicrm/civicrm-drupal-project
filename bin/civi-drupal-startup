@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+## Reset the database and launch php's built-in web-server
+
+## Determine the absolute path of the directory with the file
+## absdirname <file-path>
+function absdirname() {
+  pushd $(dirname $0) >> /dev/null
+    pwd
+  popd >> /dev/null
+}
+
+BINDIR=$(absdirname "$0")
+PRJDIR=$(dirname "$BINDIR")
+WEBDIR="$PRJDIR/web"
+TMPDIR="$PRJDIR/app/tmp"
+
+if [ -n "$1 "]; then
+  SITE_TYPE="$1"
+else
+  SITE_TYPE="drupal-demo"
+fi
+
+echo "$BINDIR/civi-install" drupal-demo http://localhost:8181 cividrupal
+echo php -S localhost:8181 -t "$WEBDIR" "$PRJDIR/src/drupal-router.php"
